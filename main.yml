@@ -1,0 +1,86 @@
+---
+- hosts: master
+  become: yes
+  # vars:
+  #   aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
+  #   aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+  tasks:
+
+    # - name: install awscli
+    #   yum:
+    #     name: awscli
+    #     state: latest
+    #   tags: first 
+
+    # - name: create an S3 bucket
+    #   s3_bucket:
+    #     name:
+    #     aws_access_key:
+    #     aws_secret_key:
+    #   tags: bucket
+
+    # - name: putting folder bucket into our s3bucket
+    #   shell: >
+    #     aws s3 sync bucket s3:// 
+    #   tags: bucket
+
+    # - name: upload the file to S3
+    #   s3_sync:
+    #    aws_access_key:
+    #     aws_secret_key:
+    #     region:
+    #     bucket:
+    #     file_root:
+    #     object:      
+
+    - name: Creates directory
+      file:
+        path: ../packages
+        state: directory
+      tags: first 
+
+    - name: install wget
+      yum:
+        name: wget
+        state: latest
+      tags: first  
+
+    - name: installing terraform
+      get_url:
+        url: https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+        dest: ../packages
+      tags: first  
+
+    - name: installing packer
+      get_url:
+        url: https://releases.hashicorp.com/packer/1.4.0/packer_1.4.0_linux_amd64.zip
+        dest: ../packages
+      tags: first  
+
+    - name: install unzip
+      yum:
+        name: unzip
+        state: latest
+      tags: first  
+
+    - name: Extract terraform
+      unarchive:
+        src: ../packages/terraform_0.11.13_linux_amd64.zip
+        dest: ../packages
+      tags:  first  
+
+    - name: Extract packer
+      unarchive:
+        src: ../packages/packer_1.4.0_linux_amd64.zip
+        dest: ../packages
+      tags: first 
+
+    - name: install python
+      yum:
+        name: python-netaddr jp
+        state: latest
+
+    - name: install epel-release
+      yum:
+        name: git
+        state: latest
